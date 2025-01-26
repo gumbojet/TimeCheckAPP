@@ -37,10 +37,10 @@ jobs:
           python3 -m ensurepip --upgrade
           python3 -m pip install --upgrade pip setuptools
 
-      # Step 5: Install Buildozer
-      - name: Install Buildozer
+      # Step 5: Install Cython and Buildozer
+      - name: Install Cython and Buildozer
         run: |
-          python3 -m pip install buildozer
+          python3 -m pip install cython buildozer
 
       # Step 6: Build the APK
       - name: Build APK
