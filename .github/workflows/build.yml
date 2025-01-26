@@ -54,7 +54,7 @@ jobs:
           rm -rf cmdline-tools
           mkdir cmdline-tools
           # Move the extracted contents to cmdline-tools/latest
-          mv tools cmdline-tools/latest
+          mv cmdline-tools cmdline-tools/latest
           export ANDROID_HOME=~/android-sdk
           export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
@@ -76,4 +76,3 @@ jobs:
         with:
           name: app-debug.apk
           path: bin/*.apk  # Path to the generated APK file
-          
