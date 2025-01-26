@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Use the Python version your project requires
+          python-version: '3.12.6'  # Use the Python version your project requires
 
       # Step 3: Install system dependencies for Buildozer
       - name: Install system dependencies
