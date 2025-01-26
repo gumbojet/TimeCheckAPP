@@ -53,7 +53,8 @@ jobs:
           # Remove existing cmdline-tools directory if it exists
           rm -rf cmdline-tools
           mkdir cmdline-tools
-          mv tools cmdline-tools/latest
+          # Move the extracted contents to cmdline-tools/latest
+          mv cmdline-tools-latest cmdline-tools/latest
           export ANDROID_HOME=~/android-sdk
           export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
