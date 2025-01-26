@@ -37,17 +37,12 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install buildozer
 
-      # Step 5: Initialize Buildozer (if not already initialized)
-      - name: Initialize Buildozer
-        run: |
-          buildozer init
-
-      # Step 6: Build the APK
+      # Step 5: Build the APK
       - name: Build APK
         run: |
           buildozer -v android debug
 
-      # Step 7: Upload the APK as an artifact
+      # Step 6: Upload the APK as an artifact
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
