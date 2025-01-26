@@ -6,13 +6,13 @@
 [app]
 
 # (str) Title of your application
-title = My Application
+title = TimeCheck
 
 # (str) Package name
-package.name = myapp
+package.name = timecheck
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.test
+package.domain = org.timecheck
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -42,7 +42,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy
+requirements = python3,kivy===2.3.1,kivymd
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -74,8 +74,9 @@ orientation = portrait
 #
 # author = © Copyright Info
 
+osx.python_version = 3.12.6
 # Kivy version to use
-osx.kivy_version = 2.2.0
+osx.kivy_version = 2.3.1
 
 #
 # Android specific
