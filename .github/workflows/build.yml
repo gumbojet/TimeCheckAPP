@@ -28,22 +28,26 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y python3-pip python3-setuptools python3-virtualenv git zip unzip openjdk-11-jdk
+          sudo apt-get install -y python3-pip python3-setuptools python3-venv git zip unzip openjdk-11-jdk
           sudo apt-get install -y libncurses6:i386 libstdc++6:i386 zlib1g:i386
 
-      # Step 4: Install Buildozer and ensure distutils is available
-      - name: Install Buildozer
+      # Step 4: Ensure distutils is available
+      - name: Install distutils
         run: |
           python3 -m ensurepip --upgrade
-          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip setuptools
+
+      # Step 5: Install Buildozer
+      - name: Install Buildozer
+        run: |
           python3 -m pip install buildozer
 
-      # Step 5: Build the APK
+      # Step 6: Build the APK
       - name: Build APK
         run: |
           buildozer -v android debug
 
-      # Step 6: Upload the APK as an artifact
+      # Step 7: Upload the APK as an artifact
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
