@@ -23,12 +23,12 @@ jobs:
         with:
           python-version: '3.12.6'  # Use Python 3.12.6
 
-      # Step 3: Enable multi-architecture support and install 32-bit libraries
+      # Step 3: Install distutils and other system dependencies
       - name: Install system dependencies
         run: |
-          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y python3-pip python3-setuptools python3-virtualenv git zip unzip openjdk-11-jdk
+          sudo apt-get install -y python3-distutils python3-pip python3-setuptools python3-virtualenv git zip unzip openjdk-11-jdk
+          sudo dpkg --add-architecture i386
           sudo apt-get install -y libncurses6:i386 libstdc++6:i386 zlib1g:i386
 
       # Step 4: Install Buildozer
