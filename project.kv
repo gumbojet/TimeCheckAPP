@@ -1,0 +1,88 @@
+
+Config.set('kivy', 'log_level', 'debug')
+
+KV = """
+<CommonComponentLabel>
+    halign: "center"
+
+
+<MobileView>
+    CommonComponentLabel:
+        text: "Mobile"
+
+<TabletView>
+    CommonComponentLabel:
+        text: "Table"
+
+<DesktopView>
+    CommonComponentLabel:
+        text: "Desktop"
+
+ScreenManager:
+    id: screen_manager
+    Screen:
+        name: "main"
+        BoxLayout:
+            orientation: 'vertical'
+            MDTopAppBar:
+                title: "TimeCheck!"
+                left_action_items: [['menu', lambda x: app.show_menu(x)]]
+
+            MDLabel:
+                id: overall_time
+                adaptive_size: True
+                text: "00:00:00:000"
+                pos_hint: {"center_x": .5, "center_y": .005}
+                padding: "8dp", "50dp"
+                halign: 'center'
+                font_style: 'H1'
+                theme_text_color: "Primary"
+
+            MDLabel:
+                id: segment_time
+                text: "00:00:00:000"
+                pos_hint: {"center_x": .5, "center_y": .75}
+                halign: 'center'
+                font_style: 'H3'
+                theme_text_color: "Primary"
+
+            MDLabel:
+                id: segment_count
+                text: "Segments: 0"
+                halign: 'center'
+                font_style: 'H4'
+                theme_text_color: "Secondary"
+
+            MDFloatLayout:
+                MDRaisedButton:
+                    id:  start_stopwatch
+                    text: "Play/Pause"
+                    pos_hint: {"center_x": 0.2, "center_y": 0.6}
+                    font_size: "20sp"
+                    size_hint_x: .17
+                    on_release: app.start_stopwatch()
+
+                MDRaisedButton:
+                    id: record_segment
+                    text: "Segment"
+                    pos_hint: {"center_x": 0.4, "center_y": 0.6}
+                    font_size: "20sp"
+                    size_hint_x: .17
+                    on_release: app.record_segment()
+
+                MDRaisedButton:
+                    id: stop_stopwatch
+                    text: "Stop"
+                    pos_hint: {"center_x": 0.6, "center_y": 0.6}
+                    font_size: "20sp"
+                    size_hint_x: .17
+                    on_release: app.stop_stopwatch()
+
+                MDRaisedButton:
+                    id: reset_stopwatch
+                    text: "Reset"
+                    pos_hint: {"center_x": 0.8, "center_y": 0.6}
+                    font_size: "20sp"
+                    size_hint_x: .17
+                    on_release: app.reset_stopwatch()
+"""
