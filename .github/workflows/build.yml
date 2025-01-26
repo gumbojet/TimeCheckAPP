@@ -1,79 +1,54 @@
-name: Build APK
+name: Build Python APK
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger on push to the main branch
   pull_request:
     branches:
-      - main
-  workflow_dispatch:
+      - main  # Trigger on pull requests to the main branch
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use Ubuntu for the build environment
 
     steps:
-      - name: Checkout repository
+      # Step 1: Checkout the repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12.6'
+          python-version: '3.9'  # Use the Python version your project requires
 
+      # Step 3: Install system dependencies for Buildozer
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libstdc++6
-          sudo apt-get install -y git zip unzip openjdk-17-jdk \
-              python3-pip python3-venv \
-              libncurses5-dev libffi-dev libssl-dev \
-              libsqlite3-dev liblzma-dev zlib1g-dev \
-              autoconf automake cmake pkg-config \
-              libtool clang
-          pip install --upgrade pip setuptools
-          pip install buildozer cython virtualenv
+          sudo apt-get install -y python3-pip python3-setuptools python3-virtualenv git zip unzip openjdk-11-jdk
+          sudo apt-get install -y libncurses5:i386 libstdc++6:i386 zlib1g:i386
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          ndk-version: '25.1.8937393'  # Specify the NDK version you need
-          sdk-version: 'commandlinetools-latest'
-
-      - name: Set up Android environment variables
+      # Step 4: Install Buildozer
+      - name: Install Buildozer
         run: |
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-          echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME" >> $GITHUB_ENV
-          echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_NDK_HOME:$PATH" >> $GITHUB_ENV
+          python3 -m pip install --upgrade pip
+          python3 -m pip install buildozer
 
-      - name: Accept Android SDK licenses
+      # Step 5: Initialize Buildozer (if not already initialized)
+      - name: Initialize Buildozer
         run: |
-          yes | sdkmanager --licenses
+          buildozer init
 
-      - name: Install Android SDK components
-        run: |
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-          sdkmanager --install "ndk;25.1.8937393"
-
-      - name: Ensure Buildozer dependencies are installed
-        run: |
-          buildozer -v android clean || true
-          buildozer -v android update
-
-      - name: Check for existing buildozer.spec
-        run: |
-          if [ ! -f buildozer.spec ]; then
-            buildozer init
-          fi
-
+      # Step 6: Build the APK
       - name: Build APK
         run: |
-          buildozer android clean
           buildozer -v android debug
 
-      - name: Upload APK artifact
+      # Step 7: Upload the APK as an artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: app-debug.apk
-          path: bin/*.apk
+          path: bin/*.apk  # Path to the generated APK file
