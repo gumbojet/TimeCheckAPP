@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk \
@@ -34,10 +34,23 @@ jobs:
           pip install --upgrade pip setuptools
           pip install buildozer cython virtualenv
 
-      - name: Ensure Buildozer dependencies are installed
+      - name: Set up Android SDK
+        env:
+          ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
         run: |
-          buildozer -v android clean || true
-          buildozer -v android update
+          # Download and extract Android Command Line Tools
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          unzip commandlinetools-linux-9477386_latest.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+
+          # Add Android SDK tools to PATH
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+
+          # Accept licenses and install components
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-34"
 
       - name: Check for existing buildozer.spec
         run: |
@@ -45,7 +58,16 @@ jobs:
             buildozer init
           fi
 
+      - name: Ensure Buildozer dependencies are installed
+        env:
+          ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
+        run: |
+          buildozer -v android clean || true
+          buildozer -v android update
+
       - name: Build APK
+        env:
+          ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
         run: |
           buildozer android clean
           buildozer -v android debug
