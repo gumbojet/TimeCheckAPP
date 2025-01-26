@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12.6'
 
       - name: Install dependencies
         run: |
@@ -34,8 +34,11 @@ jobs:
           pip install --upgrade pip setuptools
           pip install buildozer cython virtualenv
 
-      - name: Initialize Buildozer
-        run: buildozer init
+      - name: Check for existing buildozer.spec
+        run: |
+          if [ ! -f buildozer.spec ]; then
+            buildozer init
+          fi
 
       - name: Build APK
         run: |
